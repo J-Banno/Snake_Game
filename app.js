@@ -1,6 +1,7 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-/** Variables **/
+
+/***** Variables *****/
 
 //Serpent
 let snake = [
@@ -17,8 +18,10 @@ speedY = 0;
 let appleX = 0;
 //Pomme de Y
 let appleY = 0;
+//Score
+let score = 0;
 
-/** Fonctions **/
+/***** Fonctions *****/
 
 function animation() {
   setTimeout(function () {
@@ -57,8 +60,17 @@ function moveSnake() {
   const head = { x: snake[0].x + speedX, y: snake[0].y + speedY };
   //On ajoute au début
   snake.unshift(head);
-  //On supprime à la fin
-  snake.pop();
+
+  const snakeEatApple = snake[0].x === appleX && snake[0].y === appleY;
+
+  if (snakeEatApple) {
+    score += 10;
+    document.getElementById("score").innerHTML = score;
+    createApple();
+  } else {
+    //On supprime à la fin
+    snake.pop();
+  }
 }
 
 function changeDirection(event) {

@@ -2,11 +2,17 @@ body {
   margin: 0;
   padding: 0;
   background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 #canvas {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  margin-top: 50px;
+}
+#score {
+  color: #fefefe;
+  margin-top: 200px;
+  font-size: 50px;
 }
