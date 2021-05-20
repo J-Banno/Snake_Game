@@ -12,13 +12,18 @@ let snake = [
 //vitesse sur x
 speedX = 0;
 //vitesse sur y
-speedY = -10;
+speedY = 0;
+//Pomme de X
+let appleX = 0;
+//Pomme de Y
+let appleY = 0;
 
 /** Fonctions **/
 
 function animation() {
   setTimeout(function () {
     cleanCanvas();
+    displayApple();
     moveSnake();
     displaySnake();
     //Récursion
@@ -87,9 +92,34 @@ function changeDirection(event) {
   }
 }
 
+function random() {
+  return Math.round((Math.random() * 290) / 10) * 10;
+}
+function createApple() {
+  appleX = random();
+  appleY = random();
+
+  //Controle que la pomme n'apparait pas sur le serpent
+  snake.forEach(function (part) {
+    const appleOnSnake = part.x == appleX && part.y == appleY;
+    if (appleOnSnake) {
+      createApple();
+    }
+  });
+}
+
+function displayApple() {
+  ctx.fillStyle = "red";
+  ctx.strokeStyle = "darkred";
+  ctx.beginPath();
+  ctx.arc(appleX + 5, appleY + 5, 5, 0, 2 * Math.PI);
+  ctx.fill();
+  ctx.stroke();
+}
 //Événement flêches clavier
 document.addEventListener("keydown", changeDirection);
 
 animation();
+createApple();
 changeDirection();
 displaySnake();
