@@ -32,6 +32,7 @@ function animation() {
     displayApple();
     moveSnake();
     if (gameOver()) {
+      restartGame();
       return;
     }
     displaySnake();
@@ -164,6 +165,18 @@ function gameOver() {
     over = true;
   }
   return touchBody;
+}
+
+function restartGame() {
+  const restart = document.getElementById("restart");
+
+  restart.style.display = "block";
+
+  document.addEventListener("keydown", (e) => {
+    if (e.keyCode === 32) {
+      document.location.reload(true);
+    }
+  });
 }
 //Événement flêches clavier
 document.addEventListener("keydown", changeDirection);
