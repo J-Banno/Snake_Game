@@ -22,23 +22,26 @@ let appleY = 0;
 let score = 0;
 //Bug direction
 let bugDirection = false;
+//StopGame
+let stopGame = false;
 
 /***** Fonctions *****/
 
 function animation() {
-  setTimeout(function () {
-    bugDirection = false;
-    cleanCanvas();
-    displayApple();
-    moveSnake();
-    if (gameOver()) {
-      restartGame();
-      return;
-    }
-    displaySnake();
-    //Récursion
-    animation();
-  }, 100);
+  if (stopGame === true) {
+    return;
+  } else {
+    setTimeout(function () {
+      bugDirection = false;
+      cleanCanvas();
+      displayApple();
+      moveSnake();
+
+      displaySnake();
+      //Récursion
+      animation();
+    }, 100);
+  }
 }
 
 function cleanCanvas() {
@@ -68,11 +71,19 @@ function moveSnake() {
   //On ajoute au début
   snake.unshift(head);
 
+  if (gameOver()) {
+    snake.shift(head);
+    restartGame();
+    stopGame = true;
+    return;
+  }
+
   const snakeEatApple = snake[0].x === appleX && snake[0].y === appleY;
 
   if (snakeEatApple) {
     score += 10;
     document.getElementById("score").innerHTML = score;
+
     createApple();
   } else {
     //On supprime à la fin
@@ -164,7 +175,7 @@ function gameOver() {
   ) {
     over = true;
   }
-  return touchBody;
+  return over;
 }
 
 function restartGame() {
