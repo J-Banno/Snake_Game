@@ -11,7 +11,7 @@ let snake = [
   { x: 110, y: 150 },
 ];
 //vitesse sur x
-speedX = 0;
+speedX = 10;
 //vitesse sur y
 speedY = 0;
 //Pomme de X
@@ -20,14 +20,20 @@ let appleX = 0;
 let appleY = 0;
 //Score
 let score = 0;
+//Bug direction
+let bugDirection = false;
 
 /***** Fonctions *****/
 
 function animation() {
   setTimeout(function () {
+    bugDirection = false;
     cleanCanvas();
     displayApple();
     moveSnake();
+    if (gameOver()) {
+      return;
+    }
     displaySnake();
     //Récursion
     animation();
@@ -74,6 +80,10 @@ function moveSnake() {
 }
 
 function changeDirection(event) {
+  //Gestion bug
+  if (bugDirection) return;
+  bugDirection = true;
+
   const left = 37;
   const right = 39;
   const up = 38;
@@ -127,6 +137,33 @@ function displayApple() {
   ctx.arc(appleX + 5, appleY + 5, 5, 0, 2 * Math.PI);
   ctx.fill();
   ctx.stroke();
+}
+
+function gameOver() {
+  let snakeHead = snake.slice(1, -1);
+  let touchBody = false;
+  snakeHead.forEach((cube) => {
+    if (cube.x === snake[0].x && cube.y === snake[0].y) {
+      touchBody = true;
+    }
+  });
+  const touchWallLeft = snake[0].x < -1;
+  const touchWallRight = snake[0].x > canvas.width - 10;
+  const touchWallTop = snake[0].y < -1;
+  const touchWallBottom = snake[0].y > canvas.height - 10;
+
+  let over = false;
+
+  if (
+    touchBody ||
+    touchWallBottom ||
+    touchWallLeft ||
+    touchWallTop ||
+    touchWallRight
+  ) {
+    over = true;
+  }
+  return touchBody;
 }
 //Événement flêches clavier
 document.addEventListener("keydown", changeDirection);
